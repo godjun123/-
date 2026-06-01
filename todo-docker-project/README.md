@@ -154,6 +154,7 @@ docker compose down
 
 ```bash
 docker compose down -v
+
 docker compose up --build -d
 ```
 
@@ -175,3 +176,9 @@ docker compose exec backend python seed_demo_data.py
 
 샘플 계정은 `demo_user_01`부터 `demo_user_20`까지이며 비밀번호는 모두
 `qwer1234`입니다. Todo 마감일은 스크립트를 실행한 시점의 다음 달로 설정됩니다.
+
+
+## 시연 영상
+
+
+
