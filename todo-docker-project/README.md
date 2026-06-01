@@ -180,5 +180,6 @@ docker compose exec backend python seed_demo_data.py
 
 ## 시연 영상
 
+https://github.com/godjun123/-/blob/main/todo-docker-project/%ED%99%94%EB%A9%B4%20%EB%85%B9%ED%99%94%20%EC%A4%91%202026-06-01%20184239.7z
 
 
