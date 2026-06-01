@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Tier Todo List</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="todo-app">
+      <h1>Todo List</h1>
+      <p class="subtitle">Docker Compose 3-Tier Web Application</p>
+
+      <section id="auth-section">
+        <div class="auth-tabs">
+          <button id="show-login" class="tab-button active" type="button">Login</button>
+          <button id="show-register" class="tab-button" type="button">Register</button>
+        </div>
+
+        <form id="auth-form">
+          <div id="registration-fields" class="registration-fields hidden">
+            <input
+              id="full-name-input"
+              type="text"
+              maxlength="100"
+              placeholder="Full name"
+              autocomplete="name"
+            >
+            <input
+              id="email-input"
+              type="email"
+              maxlength="255"
+              placeholder="Email address"
+              autocomplete="email"
+            >
+          </div>
+          <input
+            id="username-input"
+            type="text"
+            maxlength="50"
+            placeholder="Username"
+            autocomplete="username"
+            required
+          >
+          <div class="password-field">
+            <input
+              id="password-input"
+              type="password"
+              minlength="6"
+              placeholder="Password"
+              autocomplete="current-password"
+              required
+            >
+            <button
+              id="toggle-password"
+              class="password-toggle"
+              type="button"
+              aria-label="Show password"
+              aria-pressed="false"
+            >&#128065;</button>
+          </div>
+          <div id="password-confirmation-field" class="password-field hidden">
+            <input
+              id="password-confirmation-input"
+              type="password"
+              minlength="8"
+              placeholder="Confirm password"
+              autocomplete="new-password"
+            >
+          </div>
+          <p id="password-guide" class="form-guide hidden">
+            Use at least 8 characters including letters and numbers.
+          </p>
+          <button id="auth-submit" type="submit">Login</button>
+        </form>
+      </section>
+
+      <section id="todo-section" class="hidden">
+        <div class="user-bar">
+          <span>
+            Signed in as <strong id="current-user"></strong>
+            <span id="admin-badge" class="admin-badge hidden">Admin</span>
+          </span>
+          <button id="logout-button" class="secondary-button" type="button">Logout</button>
+        </div>
+
+        <form id="todo-form">
+          <textarea
+            id="todo-input"
+            maxlength="255"
+            placeholder="Enter a todo"
+            autocomplete="off"
+            rows="1"
+            required
+          ></textarea>
+          <input
+            id="todo-due-date"
+            type="date"
+            aria-label="Due date"
+          >
+          <button type="submit">Add</button>
+        </form>
+
+        <div class="user-summary-grid">
+          <section class="panel-card">
+            <h2>Completion Rate</h2>
+            <strong id="completion-rate">0%</strong>
+            <p id="completion-detail">0 of 0 todos completed</p>
+          </section>
+          <section class="panel-card">
+            <h2>Profile</h2>
+            <form id="profile-form" class="compact-form">
+              <input id="profile-name" type="text" maxlength="100" placeholder="Full name" required>
+              <input id="profile-email" type="email" maxlength="255" placeholder="Email" required>
+              <button type="submit">Save Profile</button>
+            </form>
+          </section>
+        </div>
+
+        <section class="panel-card notices-panel">
+          <h2>Notices</h2>
+          <div id="user-notice-list" class="notice-list"></div>
+        </section>
+
+        <div class="todo-dashboard">
+          <section class="todo-list-panel">
+            <h2>My Todos</h2>
+            <div class="todo-filters">
+              <input id="todo-search" type="search" placeholder="Search todos">
+              <select id="todo-status-filter" aria-label="Filter todos by status">
+                <option value="all">All statuses</option>
+                <option value="todo">To do</option>
+                <option value="in_progress">In progress</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+            <ul id="todo-list" class="todo-list"></ul>
+          </section>
+
+          <section class="calendar-section">
+            <div class="calendar-header">
+              <button id="previous-month-button" type="button" aria-label="Previous month">&lt;</button>
+              <h2 id="calendar-month"></h2>
+              <button id="next-month-button" type="button" aria-label="Next month">&gt;</button>
+            </div>
+            <div class="calendar-weekdays">
+              <span>Sun</span>
+              <span>Mon</span>
+              <span>Tue</span>
+              <span>Wed</span>
+              <span>Thu</span>
+              <span>Fri</span>
+              <span>Sat</span>
+            </div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="admin-section" class="hidden">
+        <div class="user-bar">
+          <span>
+            Signed in as <strong id="admin-user"></strong>
+            <span class="admin-badge">Admin</span>
+          </span>
+          <button id="admin-logout-button" class="secondary-button" type="button">Logout</button>
+        </div>
+
+        <div class="admin-heading">
+          <div>
+            <h2>User Management</h2>
+            <p>Registered user accounts</p>
+          </div>
+          <button id="refresh-users-button" type="button">Refresh</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span>Total users</span>
+            <strong id="total-users-stat">0</strong>
+          </article>
+          <article class="stat-card">
+            <span>Administrators</span>
+            <strong id="admin-users-stat">0</strong>
+          </article>
+          <article class="stat-card">
+            <span>Regular users</span>
+            <strong id="regular-users-stat">0</strong>
+          </article>
+          <article class="stat-card">
+            <span>Total todos</span>
+            <strong id="total-todos-stat">0</strong>
+          </article>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="user-list"></tbody>
+          </table>
+        </div>
+
+        <div class="admin-panels">
+          <section class="panel-card">
+            <h2>Notice Management</h2>
+            <form id="notice-form" class="compact-form">
+              <input id="notice-title" type="text" maxlength="150" placeholder="Notice title" required>
+              <textarea id="notice-content" rows="3" placeholder="Notice content" required></textarea>
+              <div class="form-actions">
+                <button id="notice-submit-button" type="submit">Create Notice</button>
+                <button id="notice-cancel-button" class="secondary-button hidden" type="button">Cancel</button>
+              </div>
+            </form>
+            <div id="admin-notice-list" class="notice-list"></div>
+          </section>
+
+          <section class="panel-card">
+            <h2>Recent Activity</h2>
+            <div id="activity-log-list" class="activity-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <p id="message" class="message" role="status"></p>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

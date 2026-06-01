@@ -1,0 +1,53 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: todo-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - todo-network
+
+  backend:
+    build:
+      context: ./backend
+    container_name: todo-backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: todo_db
+      DB_USER: todo_user
+      DB_PASSWORD: todo_password
+      SECRET_KEY: change-this-secret-key-for-production
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - todo-network
+
+  db:
+    image: mysql:8.4
+    container_name: todo-db
+    environment:
+      MYSQL_DATABASE: todo_db
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - todo-network
+
+networks:
+  todo-network:
+
+volumes:
+  mysql-data:
